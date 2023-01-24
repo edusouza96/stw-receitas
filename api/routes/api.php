@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\IngredientController;
 
 /*
@@ -26,5 +27,15 @@ Route::prefix('ingredientes')->group(function () {
         Route::post('salvar', 'store')->name('ingredients.store');
         Route::put('{id}/atualizar', 'update')->name('ingredients.update');
         Route::delete('{id}/remover', 'destroy')->name('ingredients.destroy');
+    });
+});
+
+Route::prefix('receitas')->group(function () {
+    Route::controller(RecipeController::class)->group(function () {
+        Route::get('/', 'index')->name('recipes.index');
+        Route::post('salvar', 'store')->name('recipes.store');
+        Route::get('{id}/buscar', 'show')->name('recipes.show');
+        Route::put('{id}/atualizar', 'update')->name('recipes.update');
+        Route::delete('{id}/remover', 'destroy')->name('recipes.destroy');
     });
 });
