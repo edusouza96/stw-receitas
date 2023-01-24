@@ -89,6 +89,10 @@ class IngredientController extends Controller
     public function destroy($id)
     {
         try {
+            $ingredient = Ingredient::find($id);
+            if(!$ingredient) throw new \Exception("ID do ingrediente informado não existe", 1);
+            if(!$ingredient->canDestroy()) throw new \Exception("Não pode remover o ingrediente, pois o mesmo é usado em outras receitas", 1);
+
             Ingredient::destroy($id);
 
             return response()->json([
