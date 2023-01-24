@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Recipe;
 use Illuminate\Http\Request;
+use App\Http\Resources\RecipeIngredientsResource;
 
 class RecipeController extends Controller
 {
@@ -17,7 +18,7 @@ class RecipeController extends Controller
         $recipes = Recipe::orderBy('name', 'asc')->get();
 
         return response()->json([
-            'data' => $recipes,
+            'data' => $recipes->map(function($recipe){ return new RecipeIngredientsResource($recipe); }),
             'message' => '',
             'success' => true
         ]);
@@ -33,9 +34,16 @@ class RecipeController extends Controller
     public function store(Request $request)
     {
         try {
-            Recipe::create([
+            $recipe = Recipe::create([
                 "name" => $request->name
             ]);
+
+            foreach ($request->ingredients as $ingredients) {
+                $recipe->ingredients()->attach($ingredients['id'], [
+                    "kg" => $ingredients['kg'],
+                    "order" => $ingredients['order'],
+                ]);
+            }
 
             return response()->json([
                 'message' => 'Receita adicionado com sucesso',
@@ -61,7 +69,7 @@ class RecipeController extends Controller
         $recipe = Recipe::find($id);
 
         return response()->json([
-            'data' => $recipe,
+            'data' => new RecipeIngredientsResource($recipe),
             'message' => '',
             'success' => true
         ]);
@@ -82,6 +90,14 @@ class RecipeController extends Controller
 
             $recipe->name = $request->name;
             $recipe->save();
+
+            $recipe->ingredients()->detach();
+            foreach ($request->ingredients as $ingredients) {
+                $recipe->ingredients()->attach($ingredients['id'], [
+                    "kg" => $ingredients['kg'],
+                    "order" => $ingredients['order'],
+                ]);
+            }
 
             return response()->json([
                 'message' => 'Receita atualizada com sucesso',
