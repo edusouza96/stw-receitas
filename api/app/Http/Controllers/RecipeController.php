@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Recipe;
 use Illuminate\Http\Request;
+use App\Models\RecipeHistory;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\RecipeIngredientsResource;
 
 class RecipeController extends Controller
@@ -34,6 +36,7 @@ class RecipeController extends Controller
     public function store(Request $request)
     {
         try {
+            DB::beginTransaction();
             $recipe = Recipe::create([
                 "name" => $request->name
             ]);
@@ -45,12 +48,20 @@ class RecipeController extends Controller
                 ]);
             }
 
+            RecipeHistory::create([
+                "recipe_id" => $recipe->id,
+                "content" => json_encode($request->all()),
+            ]);
+
+            DB::commit();
+
             return response()->json([
                 'message' => 'Receita adicionado com sucesso',
                 'success' => true
             ]);
 
         } catch (\Exception $ex) {
+            DB::rollBack();
             return response()->json([
                 'message' => $ex->getMessage(),
                 'success' => false
@@ -85,6 +96,8 @@ class RecipeController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            DB::beginTransaction();
+
             $recipe = Recipe::find($id);
             if(!$recipe) throw new \Exception("ID da Receita informada não existe", 1);
 
@@ -99,12 +112,21 @@ class RecipeController extends Controller
                 ]);
             }
 
+            RecipeHistory::create([
+                "recipe_id" => $recipe->id,
+                "content" => json_encode($request->all()),
+            ]);
+
+            DB::commit();
+
             return response()->json([
                 'message' => 'Receita atualizada com sucesso',
                 'success' => true
             ]);
 
         } catch (\Exception $ex) {
+            DB::rollBack();
+
             return response()->json([
                 'message' => $ex->getMessage(),
                 'success' => false
