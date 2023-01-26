@@ -11,7 +11,7 @@ class IngredientController extends Controller
 
     public function index()
     {
-        $ingredients = Ingredient::orderBy('description', 'asc')->get();
+        $ingredients = Ingredient::orderBy('id', 'asc')->get();
 
         return response()->json([
             'data' => $ingredients,
