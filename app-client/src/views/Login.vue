@@ -72,7 +72,7 @@ export default {
                     password: this.password
                 })
                 .then((response) => {
-                    if (response.data.status) {
+                    if (response.data.success) {
                         localStorage.setItem('TOKEN_SWT', response.data.token);
                         this.$router.push('/ingredientes');
                     }
