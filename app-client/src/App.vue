@@ -1,51 +1,42 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-  <div>
+    <div>
+        <header>
+            <div class="wrapper">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#">STW</a>
+                        <button
+                            class="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarNavAltMarkup"
+                            aria-controls="navbarNavAltMarkup"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation"
+                        >
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
 
-    <header>
-      <div class="wrapper">
-        <nav>
-          <RouterLink to="/receitas">Receitas</RouterLink>
-          <RouterLink to="/ingredientes">Ingredientes</RouterLink>
-        </nav>
-      </div>
-    </header>
+                        <div
+                            class="collapse navbar-collapse"
+                            id="navbarNavAltMarkup"
+                        >
+                            <div class="navbar-nav">
+                                <RouterLink class="nav-link" to="/receitas">Receitas</RouterLink>
+                                <RouterLink class="nav-link" to="/ingredientes">Ingredientes</RouterLink>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </header>
 
-    <main class="">
-      <RouterView />
-    </main>
-  </div>
+        <main class="">
+            <RouterView />
+        </main>
+    </div>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-</style>

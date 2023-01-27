@@ -90,14 +90,12 @@ export default {
         updated(data){
             this.get();
 
-            if(data.id){
-                this.recipe = null;
-                this.message = data.message;
-                this.typeMessage = 'success';
-                var modalElement = document.getElementById('add_recipe_modal');
-                var modal = bootstrap.Modal.getInstance(modalElement)
-                modal.hide();
-            }
+            this.recipe = null;
+            this.message = data.message;
+            this.typeMessage = 'success';
+            var modalElement = document.getElementById('add_recipe_modal');
+            var modal = bootstrap.Modal.getInstance(modalElement)
+            modal.hide();
 
         },
         get(){

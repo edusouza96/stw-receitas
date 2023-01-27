@@ -12,23 +12,23 @@ export default {
 <template>
     <div class="view-recipe-modal">
         <div class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" id="view_recipe_modal" >
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header text-white bg-dark bg-gradient">
                         <h5 class="modal-title">Visualizar Receita</h5>
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive" v-if="recipe">
-                            <table class="table table-striped table-hover w-100">
-                                <thead class="table-dark">
-                                    <tr>
+                            <table class="table table-hover w-100">
+                                <thead>
+                                    <tr class="table-dark">
                                         <th colspan="2"> Código: {{recipe.id}}</th>
                                         <th colspan="2"> Receita: {{recipe.name}}</th>
                                     </tr>
-                                    <tr>
+                                    <tr class="table-dark">
                                         <th colspan="4">Ingredientes</th>
                                     </tr>
-                                    <tr>
+                                    <tr class="table-secondary">
                                         <th>Ordem</th>
                                         <th>Código</th>
                                         <th>Descrição</th>

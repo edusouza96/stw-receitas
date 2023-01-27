@@ -1,12 +1,62 @@
+<template>
+    <div class="add-recipe-modal">
+        <div class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" id="add_recipe_modal" >
+            <div class="modal-dialog modal-fullscreen" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-white bg-dark bg-gradient">
+                        <h5 class="modal-title">Salvar Receita</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div v-if="message">
+                            <div :class="'alert alert-'+typeMessage" role="alert">
+                                {{ message }}
+                            </div>
+                        </div>
+
+                        <form v-if="!loading">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="name">Nome da receita</label>
+                                        <input type="text" class="form-control" v-model="name">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <SelectIngredients @updated="updated" :value="selectedIngredients"/>
+                        
+                        </form>
+
+                        <div v-if="loading" class="text-center">
+                            <i class="fas fa-spinner fa-spin fa-5x"></i>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="clear" data-bs-dismiss="modal">
+                            Fechar
+                        </button>
+                        <button type="button" class="btn btn-primary" @click="submit">
+                            Salvar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
 <script>
+import SelectIngredients from '../components/SelectIngredients.vue';
 export default {
     data() {
         return {
             id: null,
-            description: '',
+            name: '',
             message: '',
             typeMessage: null,
             loading: false,
+            selectedIngredients: [],
         }
     },
     props:{
@@ -16,6 +66,16 @@ export default {
         }
     },
     methods: {
+        updated(selectedIngredients) {
+            this.selectedIngredients = selectedIngredients;
+        },
+        clear(){
+            this.typeMessage = null;
+            this.message = null;
+            this.name = '';
+            this.id = null;
+            this.selectedIngredients = null;
+        },
         submit(){
             this.loading = true;
             this.typeMessage = null;
@@ -33,20 +93,17 @@ export default {
                 method: method,
                 url: url,
                 data: {
-                    description: this.description
+                    name: this.name,
+                    ingredients: this.selectedIngredients,
                 },
             })
             .then((response) => {
                 if (response.data.success) {
-                    this.message = response.data.message;
                     this.loading = false;
-                    this.typeMessage = 'success';
                     this.$emit('stored', {
-                        message: this.message, 
-                        id: this.id
+                        message:  response.data.message
                     });
-                    this.description = '';
-                    this.id = null;
+                    this.clear();
                 }
             }).catch((error) => {
                 this.message = error.response.data.message;
@@ -59,50 +116,15 @@ export default {
         recipe(){
             this.typeMessage = null;
             this.message = null;
-            if(this.ingredient){
+            if(this.recipe){
                 this.id = this.recipe.id;
-                this.description = this.recipe.description;
+                this.name = this.recipe.name;
+                this.selectedIngredients = this.recipe.ingredients;
             }
         }
     },
+    components:{
+        SelectIngredients
+    }
 }
 </script>
-
-<template>
-    <div class="add-recipe-modal">
-        <div class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" id="add_recipe_modal" >
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header text-white bg-dark bg-gradient">
-                        <h5 class="modal-title">Salvar Receita</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div v-if="message">
-                            <div :class="'alert alert-'+typeMessage" role="alert">
-                                {{ message }}
-                            </div>
-                        </div>
-
-                        <form v-if="!loading">
-                            <label for="name">Nome da receita</label>
-                            <input type="text" class="form-control" v-model="name">
-                        </form>
-
-                        <div v-if="loading" class="text-center">
-                            <i class="fas fa-spinner fa-spin fa-5x"></i>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Fechar
-                        </button>
-                        <button type="button" class="btn btn-primary" @click="submit">
-                            Salvar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>

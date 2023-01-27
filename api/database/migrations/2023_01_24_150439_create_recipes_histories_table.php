@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('recipe_id');
             $table->foreign('recipe_id')->on('recipes')->references('id');
 
-            $table->json('content');
+            $table->text('content');
             $table->timestamps();
         });
     }
