@@ -7,6 +7,7 @@ export default {
             message: '',
             typeMessage: null,
             loading: false,
+            token: null,
         }
     },
     props:{
@@ -35,6 +36,9 @@ export default {
                 data: {
                     description: this.description
                 },
+                headers: {
+                    'Authorization': 'Bearer '+this.token
+                }
             })
             .then((response) => {
                 if (response.data.success) {
@@ -63,6 +67,12 @@ export default {
                 this.id = this.ingredient.id;
                 this.description = this.ingredient.description;
             }
+        }
+    },
+    created() {
+        this.token = localStorage.getItem('TOKEN_SWT');
+        if(!this.token){
+            this.$router.push('/');
         }
     },
 }

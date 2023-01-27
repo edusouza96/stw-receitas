@@ -63,7 +63,8 @@ export default {
             message: '',
             typeMessage: null,
             loading: false,
-            recipe: null
+            recipe: null,
+            token: null,
         };
     },
     methods: {
@@ -72,7 +73,11 @@ export default {
             this.typeMessage = null;
             this.message = null;
             this.axios
-                .delete("http://localhost:8000/api/receitas/"+recipe.id+"/remover")
+                .delete("http://localhost:8000/api/receitas/"+recipe.id+"/remover", {
+                    headers: {
+                        'Authorization': 'Bearer '+this.token
+                    }
+                })
                 .then((response) => {
                     if (response.data.success) {
                         this.message = response.data.message;
@@ -100,7 +105,11 @@ export default {
         },
         get(){
             this.axios
-                .get("http://localhost:8000/api/receitas")
+                .get("http://localhost:8000/api/receitas", {
+                    headers: {
+                        'Authorization': 'Bearer '+this.token
+                    }
+                })
                 .then((response) => {
                     if (response.data.success) {
                         this.recipes = response.data.data;
@@ -109,6 +118,10 @@ export default {
         }
     },
     created() {
+        this.token = localStorage.getItem('TOKEN_SWT');
+        if(!this.token){
+            this.$router.push('/');
+        }
         this.get();
     },
     components: {

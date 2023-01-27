@@ -57,6 +57,7 @@ export default {
             typeMessage: null,
             loading: false,
             selectedIngredients: [],
+            token: null,
         }
     },
     props:{
@@ -96,6 +97,9 @@ export default {
                     name: this.name,
                     ingredients: this.selectedIngredients,
                 },
+                headers: {
+                    'Authorization': 'Bearer '+this.token
+                }
             })
             .then((response) => {
                 if (response.data.success) {
@@ -121,6 +125,12 @@ export default {
                 this.name = this.recipe.name;
                 this.selectedIngredients = this.recipe.ingredients;
             }
+        }
+    },
+    created() {
+        this.token = localStorage.getItem('TOKEN_SWT');
+        if(!this.token){
+            this.$router.push('/');
         }
     },
     components:{

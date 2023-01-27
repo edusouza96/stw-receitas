@@ -28,6 +28,7 @@ import { RouterLink, RouterView } from "vue-router";
                             <div class="navbar-nav">
                                 <RouterLink class="nav-link" to="/receitas">Receitas</RouterLink>
                                 <RouterLink class="nav-link" to="/ingredientes">Ingredientes</RouterLink>
+                                <a @click="exit" href="#" class="nav-link">Sair</a>
                             </div>
                         </div>
                     </div>
@@ -40,3 +41,23 @@ import { RouterLink, RouterView } from "vue-router";
         </main>
     </div>
 </template>
+
+
+<script>
+export default {
+    data() {
+        return {
+            token: null,
+        };
+    },
+    methods: {
+        exit(){
+            localStorage.removeItem('TOKEN_SWT');
+            this.$router.push('/');
+        }
+    },
+    created() {
+        this.token = localStorage.getItem('TOKEN_SWT');
+    },
+};
+</script>

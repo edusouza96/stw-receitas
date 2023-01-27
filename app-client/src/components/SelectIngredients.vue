@@ -87,6 +87,7 @@ export default {
             selectedIngredients: [],
             ingredient: '',
             kg: null,
+            token: null,
         };
     },
     methods: {
@@ -152,7 +153,11 @@ export default {
         },
         get(){
             this.axios
-                .get("http://localhost:8000/api/ingredientes")
+                .get("http://localhost:8000/api/ingredientes", {
+                    headers: {
+                        'Authorization': 'Bearer '+this.token
+                    }
+                })
                 .then((response) => {
                     if (response.data.success) {
                         this.ingredients = response.data.data;
@@ -171,6 +176,10 @@ export default {
         }
     },
     created() {
+        this.token = localStorage.getItem('TOKEN_SWT');
+        if(!this.token){
+            this.$router.push('/');
+        }
         this.get();
     },
 };
