@@ -73,7 +73,7 @@ export default {
                 })
                 .then((response) => {
                     if (response.data.success) {
-                        localStorage.setItem('TOKEN_SWT', response.data.token);
+                        localStorage.setItem('TOKEN_SWT', response.data.data);
                         this.$router.push('/ingredientes');
                     }
                 }).catch((error) => {
